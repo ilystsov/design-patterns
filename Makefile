@@ -11,13 +11,13 @@ update:
 	poetry install --no-root
 
 test:
-	pytest $(TEST_FOLDER) --cov=server
+	poetry run pytest $(TEST_FOLDER) --cov=$(CODE_FOLDERS) --cov-report term --cov-report=html
 
 format:
-	black .
+	poetry run black --line-length 79 .
 
 lint:
-	black --check .
-	flake8 $(CODE_FOLDERS) $(TEST_FOLDERS)
-	pylint $(CODE_FOLDERS) $(TEST_FOLDERS)
-	mypy $(CODE_FOLDERS) $(TEST_FOLDERS)
+	poetry run black --check .
+	poetry run flake8 $(CODE_FOLDERS) $(TEST_FOLDERS)
+	poetry run pylint $(CODE_FOLDERS) $(TEST_FOLDERS)
+	poetry run mypy $(CODE_FOLDERS) $(TEST_FOLDERS)

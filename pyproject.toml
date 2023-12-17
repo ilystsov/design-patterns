@@ -22,14 +22,17 @@ python-dateutil = ">=2.8.2"
 pydantic = "^1.10.5, <2"
 aenum = ">=3.1.11"
 tenacity = "^8.2.3"
+httpx = "^0.19.0"
+pyyaml = "^6.0.1"
 
-[tool.poetry.dev-dependencies]
+
+
+[tool.poetry.group.dev.dependencies]
 pytest = "^6.2.5"
 pytest-asyncio = "^0.15.1"
 pytest-mock = "^3.12.0"
 pytest-cov = "^4.1"
 pylint = "^3.0.1"
-httpx = "^0.19.0"
 watchdog = "^3.0.0"
 black = "^23.9.1"
 flake8 = "^6.1.0"
@@ -38,6 +41,8 @@ types-requests = "^2.31.0.9"
 mypy = "^1.6.0"
 alembic = "^1.12.0"
 faker = "^19.10.0"
+requests = "^2.31.0"
+pytest-lazy-fixture = "^0.6.3"
 
 [build]
 script = "poetry build"
@@ -71,5 +76,5 @@ show_missing = true
 skip_covered = true
 fail_under = 100
 omit = [
-    "server/aspi.py"
+    "server/asgi.py"
 ]

@@ -8,11 +8,11 @@ WORKDIR /opt/build
 RUN pip install poetry
 
 # Copy only requirements to cache them in docker layer
-COPY pyproject.toml poetry.lock server config ./
+COPY pyproject.toml poetry.lock server config files ./
 
 # Project initialization:
 RUN poetry config virtualenvs.create false \
-    && poetry install --no-dev
+    && poetry install --without dev
 
 # Start final image
 FROM python:3.10-slim
@@ -22,7 +22,9 @@ WORKDIR /opt/app
 # Copy only the relevant files from the builder
 COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
-COPY server config /opt/app/
+COPY server /opt/app/server
+COPY config /opt/app/config
+COPY files /opt/app/files
 
 # Application entrypoint
-CMD ["uvicorn", "server.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "server.asgi:app", "--host", "0.0.0.0", "--port", "8000"]
