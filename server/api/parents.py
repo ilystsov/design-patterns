@@ -61,7 +61,7 @@ class FileParser(ABC):
 class JSONFileParser(FileParser):
     def parse(self, file_path: str) -> dict | None:
         try:
-            with open(file_path, 'r') as file:
+            with open(file_path, 'r', encoding='utf-8') as file:
                 return json.load(file)
         except json.JSONDecodeError:
             return None
@@ -90,7 +90,7 @@ class XMLFileParser(FileParser):
 class YMLFileParser(FileParser):
     def parse(self, file_path: str) -> dict | None:
         try:
-            with open(file_path, 'r') as file:
+            with open(file_path, 'r', encoding='utf-8') as file:
                 return yaml.safe_load(file)
         except yaml.YAMLError:
             return None
