@@ -1,3 +1,4 @@
+import logging
 from unittest.mock import mock_open, MagicMock, patch, AsyncMock
 import httpx
 import pytest
@@ -14,7 +15,7 @@ from server.api.weather import (
     ForecastContext,
     validate_forecast,
 )
-from server.app import AppBuilder
+from server.app import AppBuilder, create_app
 from server.asgi import app
 from server.api.parents import (
     JSONFileFactory,
@@ -349,3 +350,25 @@ def test_enable_file_logging():
     assert builder._log_to_file is True
     assert builder._log_file_path == 'test.log'
     assert builder._file_log_level == 'INFO'
+
+
+@patch('server.app.app_settings')
+def test_create_app(mock_app_settings):
+    test_log_file = 'test.log'
+    test_log_level = 'INFO'
+    mock_app_settings.enable_file_logging = True
+    mock_app_settings.log_file_path = test_log_file
+    mock_app_settings.log_level = test_log_level
+
+    create_app()
+
+    root_logger = logging.getLogger()
+    file_handlers = [
+        handler
+        for handler in root_logger.handlers
+        if isinstance(handler, logging.FileHandler)
+    ]
+    assert len(file_handlers) != 0
+    file_handler = file_handlers[0]
+    assert file_handlers[0].baseFilename.endswith(test_log_file)
+    assert file_handler.level == logging.getLevelName(test_log_level)
